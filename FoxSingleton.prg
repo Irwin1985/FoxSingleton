@@ -1,19 +1,18 @@
-oRef1 = Createobject("Singleton", "cliente")
-oRef2 = Createobject("Singleton", "cliente")
-oRef1.NomCli = "Irwin Rodríguez"
-
-Messagebox(oRef1.NomCli)
-Messagebox(oRef2.NomCli)
-
-Release oRef1, oRef2
-Clear All
-Return
-
-*-- Mi clase original
-Define Class cliente As Custom
-	NomCli = ""
-Enddefine
-
+*---------------------------------------------------------------------------------------------------------------*
+*
+* @title:		Librería FoxSingleton
+* @description:	Singleton Pattern made easy with FoxSingleton
+* @version:		1.2
+* @author:		Irwin Rodríguez
+* @email:		rodriguez.irwin@gmail.com
+* @license:		MIT
+* @inspired_by:	http://www.victorespina.com.ve/wiki/index.php?title=SingletonPattern_(VFP)
+*
+*
+* -------------------------------------------------------------------------
+* Version Log:
+* Release 2019-05-22	v.1.2		- Official Release at https://github.com/Irwin1985/FoxSingleton
+*---------------------------------------------------------------------------------------------------------------*
 
 *-- Singleton Class
 Define Class Singleton As SingletonTemplate
