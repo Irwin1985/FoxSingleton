@@ -11,8 +11,9 @@ Singleton Pattern made easy with Visual FoxPro.
 
 **[FoxSingleton](/README.md)** - v.1.2 - Release 2019-05-22 23:07:16
 
-<hr>
+
 # Example
+<hr>
 <pre>
    * --------------------------------------------------------------------------------- *
    * 1. Save FoxSingleton anywhere in your project's path.
