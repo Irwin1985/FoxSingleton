@@ -1,85 +1,77 @@
-oRef1 = Createobject("clienteClass")
-oRef2 = Createobject("clienteClass")
+oRef1 = Createobject("Singleton", "cliente")
+oRef2 = Createobject("Singleton", "cliente")
 oRef1.NomCli = "Irwin Rodríguez"
-MESSAGEBOX(oRef1.NomCli)
-MESSAGEBOX(oRef2.NomCli)
-RELEASE ALL
-CLEAR ALL
-return
 
-Define Class clienteClass As SingletonPattern
-	className = "clienteClass"
-	nomcli = ""
+Messagebox(oRef1.NomCli)
+Messagebox(oRef2.NomCli)
+
+Release oRef1, oRef2
+Clear All
+Return
+
+*-- Mi clase original
+Define Class cliente As Custom
+	NomCli = ""
 Enddefine
 
-Define Class SingletonPattern As Custom
-	*
-	className = ""
 
-	* Constructor
-	* El parametro plInstance es utilizado por el metodo createInstance() en el caso
-	* de que la clase real sea una subclase de SingletonPattern, para indicar que se
-	* debe crear la instancia directamente
-	Procedure Init(plInstanceMode)
-		If plInstanceMode
+*-- Singleton Class
+Define Class Singleton As SingletonTemplate
+	Procedure Init(tcOriginClass)
+		This.OriginClass = tcOriginClass
+		DoDefault()
+	Endproc
+Enddefine
+
+*-- Singleton Template
+Define Class SingletonTemplate As Custom
+	OriginClass 		= ""
+	#Define True 		.T.
+	#Define False 		.F.
+	#Define UdPems		5
+	#Define UnkNown		"U"
+
+	Procedure Init(tbDoNotCreate)
+		If tbDoNotCreate
 			Return
-		Endif
-		If Empty(This.className)      && Si no se indica una clase real se asume
-			This.className = This.Class  && esta misma clase
-		Endif
-		If Not This.checkInstance()   && Se verifica si ya existe una instancia de
-			This.createInstance()        && la clase. Si no es si, se crea
-		Endif
-	Endproc
+		Else &&tbDoNotCreate
+		Endif &&tbDoNotCreate
 
-	* checkInstance
-	* Determina si ya existe una instancia creada para la clase real
+		If !This.checkInstance()
+			This.createInstance()
+		Else &&!This.checkInstance()
+		Endif &&!This.checkInstance()
+	Endproc
 	Procedure checkInstance
-		If Not Isnull(This.getInstance())   && Si podemos obtener una referencia a la instancia
-			Return .T.                         && es porque la misma existe
-		Endif
-		If !Pemstatus(_Screen,This.className, 5)    && Si no existe la propiedad asociada a la clase
-			_Screen.AddProperty(This.className, Null)  && en _Screen, se crea
-		Endif
-		Return .F.
-	Endproc
+		If !Isnull(This.getInstance())
+			Return True
+		Else &&!Isnull(This.getInstance())
+		Endif &&!Isnull(This.getInstance())
 
-	* createInstance
-	* Crea una instancia de la clase real
+		If !Pemstatus(_Screen,This.OriginClass, UdPems)
+			_Screen.AddProperty(This.OriginClass, .Null.)
+		Else &&!Pemstatus(_Screen,This.OriginClass, UdPems)
+		Endif &&!Pemstatus(_Screen,This.OriginClass, UdPems)
+		Return False
+	Endproc
 	Procedure createInstance
 		Local oInstance
-		If Lower(This.Class) == Lower(This.className)   && La clase real es una subclase directa de SingletonPattern ?
-			oInstance = Create(This.className, .T.)
-		Else
-			oInstance = Create(This.className)
-		Endif
-		Store oInstance To ("_Screen." + This.className)
+		oInstance = Iif(Lower(This.Class) == Lower(This.OriginClass), CreateObject(This.OriginClass, True), CreateObject(This.OriginClass))
+		Store oInstance To ("_Screen." + This.OriginClass)
 	Endproc
-
-	* getInstance
-	* Devuelve una referencia a la instancia unica de la clase real
 	Procedure getInstance
-		If !Pemstatus(_Screen,This.className,5) Or Type("_Screen." + This.className)<>"O"
-			Return Null
-		Endif
-		Return Eval("_Screen." + This.className)
+		Return Iif(Type("_Screen." + This.OriginClass)==UnkNown,.Null.,Eval("_Screen." + This.OriginClass))
 	Endproc
-
-	* releaseInstance
-	* Libera la instancia unica de la clase real
-	Procedure releaseInstance
-		If This.checkInstance()
-			Store Null To ("_Screen." + This.className)
-		Endif
+	*-- Destroy
+	Procedure Destroy
+		Try
+			lcProp = This.OriginClass
+			=Removeproperty(_Screen, lcProp)
+		Catch
+		Endtry
 	Endproc
-
-	* Accesor para la propiedad THIS
-	* Este accesor decide si devuelve una referencia al controlador Singleton o a la clase real
-	Procedure THIS_Access(cMember)
-		If Inlist(Lower(cMember),"classname","checkinstance","createinstance","getinstance","class")
-			Return This
-		Else
-			Return Eval("_Screen." + This.className)
-		Endif
-	Endproc
+	*--This_Access(cMember)
+	Function This_Access(cMember)
+		Return Iif(Inlist(Lower(cMember), "originclass", "checkinstance", "createinstance", "getinstance", "class"), This, Eval("_Screen." + This.OriginClass))
+	Endfunc
 Enddefine
