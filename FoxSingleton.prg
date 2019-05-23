@@ -1,17 +1,16 @@
 *---------------------------------------------------------------------------------------------------------------*
 *
-* @title:		Librería FoxSingleton
-* @description:	Singleton Pattern made easy with FoxSingleton
+* @title:		FoxSingleton Library
+* @description:	Singleton Pattern made easy with FoxSingleton in Visual FoxPro 9.0
 * @version:		1.2
 * @author:		Irwin Rodríguez
 * @email:		rodriguez.irwin@gmail.com
 * @license:		MIT
 * @inspired_by:	http://www.victorespina.com.ve/wiki/index.php?title=SingletonPattern_(VFP)
 *
-*
-* -------------------------------------------------------------------------
+*---------------------------------------------------------------------------------------------------------------*
 * Version Log:
-* Release 2019-05-22	v.1.2		- Official Release at https://github.com/Irwin1985/FoxSingleton
+* Release 2019-05-22	v.1.2	- Official Release at https://github.com/Irwin1985/FoxSingleton
 *---------------------------------------------------------------------------------------------------------------*
 
 *-- Singleton Class
