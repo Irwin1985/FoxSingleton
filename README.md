@@ -12,8 +12,9 @@ Singleton Pattern made easy with Visual FoxPro.
 **[FoxSingleton](/README.md)** - v.1.2 - Release 2019-05-22 23:07:16
 
 
-# Example
+### Example
 <hr>
+
 <pre>
    * --------------------------------------------------------------------------------- *
    * 1. Save FoxSingleton anywhere in your project's path.
@@ -23,14 +24,14 @@ Singleton Pattern made easy with Visual FoxPro.
    * 3. Create an instance of "Singleton" class passing your class name as parameter.
    * --------------------------------------------------------------------------------- *
    
-   *!* This is your class
+   *-- This is your class --*
    Define Class Person As Custom
       name = ""
       age = 0
       email = ""
    EndDefine
    
-   *!* Now create a Person object
+   *-- Now create a Person object --*
    oPerson1 = CreateObject("Singleton", "Person")
    oPerson2 = CreateObject("Singleton", "Person")
    
