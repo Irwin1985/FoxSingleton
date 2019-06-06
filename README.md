@@ -15,7 +15,7 @@ Singleton Pattern made easy with Visual FoxPro.
 ### Example
 <hr>
 
-<pre>
+```xBase
    * --------------------------------------------------------------------------------- *
    * 1. Save FoxSingleton anywhere in your project's path.
    * 2. Declare FoxSingleton in your main.prg declaration procedures.
@@ -38,4 +38,4 @@ Singleton Pattern made easy with Visual FoxPro.
    oPerson1.name = "Jhon Doe"
    ?oPerson2.name &&Prints 'Jhon Doe'
    Release oPerson1, oPerson2   
-</pre>
+```
