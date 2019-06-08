@@ -16,26 +16,31 @@ Singleton Pattern made easy with Visual FoxPro.
 <hr>
 
 ```xBase
-   * --------------------------------------------------------------------------------- *
+   *======================================================================================
    * 1. Save FoxSingleton anywhere in your project's path.
    * 2. Declare FoxSingleton in your main.prg declaration procedures.
    *    eg. Set Procedure to "FoxSingleton.prg" Additive   
    *
    * 3. Create an instance of "Singleton" class passing your class name as parameter.
-   * --------------------------------------------------------------------------------- *
+   *======================================================================================
    
    *-- This is your class --*
-   Define Class Person As Custom
-      name = ""
-      age = 0
-      email = ""
+   Define Class People As Custom
+      FirstName = ""
+      LastName  = ""
+      
+      Procedure FullName As String
+         Return This.FirstName + Space(1) + This.LastName
+      *====================================================================
    EndDefine
    
    *-- Now create a Person object --*
-   oPerson1 = CreateObject("Singleton", "Person")
-   oPerson2 = CreateObject("Singleton", "Person")
+   oPerson1 = CreateObject("Singleton", "People")
+   oPerson2 = CreateObject("Singleton", "People")
    
-   oPerson1.name = "Jhon Doe"
-   ?oPerson2.name &&Prints 'Jhon Doe'
+   oPerson1.Firstname = "Jhon"
+   oPerson1.LastName = "Doe"
+   
+   ?oPerson2.FullName() &&'Jhon Doe'
    Release oPerson1, oPerson2   
 ```
