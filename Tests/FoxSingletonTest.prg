@@ -8,36 +8,37 @@ Define Class FoxSingletonTest As FxuTestCase Of FxuTestCase.prg
 	#Endif
 
 	icTestPrefix = "test"
-
+	oPerson 	 = .Null.
+	oPerson2 	 = .Null.
 	Procedure Setup
-		Set Path To "FoxSingleton;"
+		Set Path To "FoxSingleton" additive
 		Set Procedure To "FoxSingleton" Additive
-		Public Person as People
-		Person = CreateObject("Singleton", "People")
-		
+		This.oPerson  = CreateObject("Singleton", "People")
+		This.oPerson2 = CreateObject("Singleton", "People")
+	EndProc	
 *====================================================================
 	Procedure TearDown
-		Set Path To
-		Set Procedure To
-		Release Person
-			
+		This.oPerson = .Null.
+		This.oPerson2 = .Null.
+	EndProc
 *====================================================================
-	Procedure test_should_create_a_person_object_as_singleton
-		This.AssertNotNull(Person, "oPerson is not a valid object")
-	
+	Procedure test_should_create_singleton_object
+		If This.AssertNotNull(This.oPerson, "failed at oPerson")
+			If This.AssertNotNull(This.oPerson2, "failed at oPerson2")
+				this.MessageOut("Test succeeded!")
+			EndIf
+		EndIf
+	EndProc
 *====================================================================
 	Procedure test_should_return_the_same_content_in_both_instances
-		Person.FirstName = 'Jhon'
-		Person.LastName  = 'Doe'
+		This.oPerson.FirstName = "Jhon"
+		This.oPerson.LastName  = "Doe"
 
-		oPerson2 = CreateObject("Singleton", "People")
-		This.MessageOut("Person.FullName: " + Person.FullName())
-		This.MessageOut("oPerson2.FullName: " + oPerson2.FullName())
+		This.MessageOut("This.oPerson.FullName: " + This.oPerson.FullName())
+		This.MessageOut("This.oPerson2.FullName: " + This.oPerson2.FullName())
 		
-		This.AssertEquals(Person.FullName(), oPerson2.FullName(), "Result values does not match")
-		Release oPerson2
-
-*====================================================================
+		This.AssertEquals(This.oPerson.FullName(), This.oPerson2.FullName(), "Result values does not match")
+	EndProc
 Enddefine
 
 *====================================================================
@@ -49,6 +50,5 @@ Define Class People As Custom
 	
 	Procedure fullName as String
 		Return This.FirstName + Space(1) + This.LastName
-		
-	*====================================================================		
+	EndProc
 Enddefine

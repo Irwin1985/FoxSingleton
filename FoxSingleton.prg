@@ -1,66 +1,25 @@
 *====================================================================
 * FoxSingleton
 *====================================================================
-Define Class Singleton As Helper
-	Procedure Init(tcOriginClass)
-		This.OriginClass = tcOriginClass
-		DoDefault()
+Define Class Singleton As Custom
+	Hidden Context
+	#Define CLIENT_CLASS "context"
 *====================================================================
-Enddefine
-
-*====================================================================
-* Helper Class
-*====================================================================
-Define Class Helper As Custom
-	OriginClass 		= ""
-
-	#Define True 		.T.
-	#Define False 		.F.
-	#Define UdPems		5
-	#Define UnkNown		"U"
-
-	Procedure Init(tbDoNotCreate)
-		If tbDoNotCreate
-			Return
-		Endif
-
-		If !This.checkInstance()
-			This.createInstance()
-		Endif
-
-*====================================================================
-	Procedure checkInstance
-		If !Isnull(This.getInstance())
-			Return True
-		Endif
-
-		If !Pemstatus(_Screen,This.OriginClass, UdPems)
-			_Screen.AddProperty(This.OriginClass, .Null.)
-		Endif
-		Return False
-
-*====================================================================
-	Procedure createInstance
-		Local oInstance
-		oInstance = Iif(Lower(This.Class) == Lower(This.OriginClass), Createobject(This.OriginClass, True), Createobject(This.OriginClass))
-		Store oInstance To ("_Screen." + This.OriginClass)
-
-*====================================================================
-	Procedure getInstance
-		Return Iif(Type("_Screen." + This.OriginClass)==UnkNown,.Null.,Eval("_Screen." + This.OriginClass))
-
-*====================================================================
-	Procedure Destroy
+	Function Init(tcContext As String) As void
+		This.Context = tcContext
 		Try
-			lcProp = This.OriginClass
-			=Removeproperty(_Screen, lcProp)
-		Catch
+			=Removeproperty(_Screen, CLIENT_CLASS)
 		Endtry
-
+		_Screen.AddProperty(This.Context, Createobject(This.Context))
+	Endfunc
 *====================================================================
-
-	Procedure This_Access(cMember)
-		Return Iif(Inlist(Lower(cMember), "originclass", "checkinstance", "createinstance", "getinstance", "class"), This, Eval("_Screen." + This.OriginClass))
-
-*====================================================================
+	Function This_Access(tcAttribute As String) As Object
+		Local loReference As Object
+		If Inlist(Lower(tcAttribute), CLIENT_CLASS)
+			loReference = This
+		Else
+			loReference = Evaluate("_Screen." + This.Context)
+		Endif
+		Return loReference
+	Endfunc
 Enddefine
